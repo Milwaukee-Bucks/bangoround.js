@@ -1,4 +1,6 @@
-# vue-carousel
+# BangoRound.js
+
+A lightweight, highly configurable carousel for Vue 3. (EVENTUALLY).
 
 ## Project setup
 ```
