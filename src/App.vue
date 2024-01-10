@@ -1,26 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <vue-carousel :slides="mySlides" minWidth="500px" maxWidth="500px">
+    <template v-slot:default="{ slide }">
+      <!-- Custom content for each slide -->
+      <div>{{ slide.content }}</div>
+    </template>
+  </vue-carousel>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import VueCarousel from './components/VueCarousel.vue';
+import { ref } from 'vue';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+const mySlides = ref([
+  { content: 'Slide 1 Content' },
+  { content: 'Slide 2 Content' },
+  { content: 'Slide 3 Content' },
+  { content: 'Slide 4 Content' },
+  { content: 'Slide 5 Content' },
+  { content: 'Slide 6 Content' },
+  { content: 'Slide 7 Content' },
+  // Add more slide contents
+]);
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
