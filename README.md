@@ -2,6 +2,8 @@
 
 A lightweight, highly configurable carousel for Vue 3. (EVENTUALLY).
 
+> ⚠️ This is a completely new work in progress and by no means production-ready.
+
 ## Project setup
 ```
 npm install
