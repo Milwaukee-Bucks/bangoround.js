@@ -1,6 +1,6 @@
 <template>
   <vue-carousel :slides="mySlides" minWidth="500px" maxWidth="500px">
-    <template v-slot:default="{ slide }">
+    <template #default="{ slide }">
       <!-- Custom content for each slide -->
       <div>{{ slide.content }}</div>
     </template>
