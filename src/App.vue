@@ -1,14 +1,14 @@
 <template>
-  <vue-carousel :slides="mySlides" minWidth="500px" maxWidth="500px">
+  <bango-round :slides="mySlides" minWidth="500px" maxWidth="500px">
     <template #default="{ slide }">
       <!-- Custom content for each slide -->
       <div>{{ slide.content }}</div>
     </template>
-  </vue-carousel>
+  </bango-round>
 </template>
 
 <script setup>
-import VueCarousel from './components/VueCarousel.vue';
+import BangoRound from './components/BangoRound.vue';
 import { ref } from 'vue';
 
 const mySlides = ref([
