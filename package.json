@@ -1,6 +1,5 @@
 {
   "name": "bangoround",
-  "private": true,
   "version": "0.0.2a",
   "type": "module",
   "files": [
