@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import {BangoRound} from '../../dist/bango-round.js';
+import '../../dist/style.css';
 
 defineProps<{ msg: string }>()
+
+const slides = [
+  { id: 1, title: 'Slide 1' },
+  { id: 2, title: 'Slide 2' },
+  { id: 3, title: 'Slide 3' },
+]
 
 const count = ref(0)
 </script>
 
 <template>
+  <bango-round :slides="slides" min-width="350px" max-width="400px" :start-slide="nextGameIndex - 1" >
+    <template #default="{ slide, index }">
+      <div>{{slide}}</div>
+    </template>
+  </bango-round>
   <h1>{{ msg }}</h1>
-
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
     <p>

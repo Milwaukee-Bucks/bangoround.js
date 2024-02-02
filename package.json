@@ -13,7 +13,8 @@
       "import": "./dist/bango-round.js",
       "require": "./dist/bango-round.umd.cjs",
       "types": "./dist/main.d.ts"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",

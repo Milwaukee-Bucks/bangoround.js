@@ -1,5 +1,5 @@
 <template>
-  <div class="bangoround--carousel-container">
+  <div class="bangoround--carousel-container test">
     <div ref="brCarouselRef" class="bangoround--carousel-slides" :style="slidesWrapperStyles">
       <div
           class="bangoround--carousel-slide"
@@ -31,7 +31,6 @@
 import { ref, computed, onMounted, defineProps, defineExpose } from 'vue';
 import useResize from './composables/useResize';
 import {useSwipeAndDrag} from './composables/useSwipeAndDrag';
-import './main.scss';
 
 interface Props {
   slides: any[];
@@ -116,3 +115,7 @@ defineExpose({
   goToSlide
 });
 </script>
+
+<style module lang="scss">
+@import 'main.scss';
+</style>
