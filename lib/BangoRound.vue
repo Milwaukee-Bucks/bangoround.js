@@ -12,8 +12,8 @@
     </div>
 
     <!-- Navigation Buttons -->
-    <button @click="prevSlide">Prev</button>
-    <button @click="nextSlide">Next</button>
+    <button @click="toPrevSlide">Prev</button>
+    <button @click="toNextSlide">Next</button>
 
     <!-- Indicators -->
     <div class="indicators">
@@ -86,13 +86,13 @@ const slideStyles = computed(() => ({
   maxWidth: props.maxWidth
 }));
 
-const nextSlide = () => {
+const toNextSlide = () => {
   if (currentSlide.value < (props.slides.length - 1)) {
     currentSlide.value++;
   }
 };
 
-const prevSlide = () => {
+const toPrevSlide = () => {
   if (currentSlide.value > 0) {
     currentSlide.value--;
   }
