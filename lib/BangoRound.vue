@@ -2,12 +2,12 @@
   <div class="carousel-container">
     <div class="carousel-slides" :style="slidesWrapperStyles">
       <div
-        class="carousel-slide"
-        v-for="(slide, index) in slides"
-        :key="index"
-        :style="slideStyles"
+          class="carousel-slide"
+          v-for="(slide, index) in slides"
+          :key="index"
+          :style="slideStyles"
       >
-        <slot :slide="slide"></slot>
+        <slot :slide="slide" :index="index"></slot>
       </div>
     </div>
 
@@ -18,31 +18,29 @@
     <!-- Indicators -->
     <div class="indicators">
       <span
-        v-for="n in Math.ceil(slides.length / computedSlidesToShow)"
-        :key="n"
-        :class="{ active: n === currentIndicator }"
-        @click="goToSlide(n)"
+          v-for="n in Math.ceil(slides.length / computedSlidesToShow)"
+          :key="n"
+          :class="{ active: n === currentIndicator }"
+          @click="goToSlide(n)"
       ></span>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue';
 
-const props = defineProps({
-  slides: {
-    type: Array,
-    required: true
-  },
-  minWidth: {
-    type: String,
-    default: '100px'
-  },
-  maxWidth: {
-    type: String,
-    default: '300px'
-  }
+interface Props {
+  slides: any[];
+  minWidth?: string;
+  maxWidth?: string;
+  startSlide?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  minWidth: '100px',
+  maxWidth: '300px',
+  startSlide: 0,
 });
 
 const currentSlide = ref(0);
@@ -50,13 +48,16 @@ const carouselWidth = ref(0);
 const currentIndicator = computed(() => Math.ceil((currentSlide.value + 1) / computedSlidesToShow.value));
 
 const updateCarouselWidth = () => {
-  const carouselElement = document.querySelector('.carousel-container');
+  const carouselElement = document.querySelector('.carousel-container') as HTMLElement | null;
   carouselWidth.value = carouselElement ? carouselElement.offsetWidth : window.innerWidth;
 };
 
 onMounted(() => {
   updateCarouselWidth();
   window.addEventListener('resize', updateCarouselWidth);
+  if (props.startSlide) {
+    currentSlide.value = props.startSlide;
+  }
 });
 
 onUnmounted(() => {
@@ -97,7 +98,7 @@ const prevSlide = () => {
   }
 };
 
-const goToSlide = (indicator) => {
+const goToSlide = (indicator: number) => {
   currentSlide.value = (indicator - 1) * computedSlidesToShow.value;
 };
 </script>
