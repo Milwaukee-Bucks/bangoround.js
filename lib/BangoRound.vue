@@ -1,8 +1,8 @@
 <template>
-  <div class="carousel-container">
-    <div class="carousel-slides" :style="slidesWrapperStyles">
+  <div class="bangoround--carousel-container">
+    <div class="bangoround--carousel-slides" :style="slidesWrapperStyles">
       <div
-          class="carousel-slide"
+          class="bangoround--carousel-slide"
           v-for="(slide, index) in slides"
           :key="index"
           :style="slideStyles"
@@ -16,7 +16,7 @@
     <button @click="toNextSlide">Next</button>
 
     <!-- Indicators -->
-    <div class="indicators">
+    <div class="bangoround--indicators">
       <span
           v-for="n in Math.ceil(slides.length / computedSlidesToShow)"
           :key="n"
@@ -29,6 +29,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue';
+import useResize from './composables/useResize';
+import './main.scss';
 
 interface Props {
   slides: any[];
@@ -44,24 +46,13 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const currentSlide = ref(0);
-const carouselWidth = ref(0);
+const {width: carouselWidth} = useResize();
 const currentIndicator = computed(() => Math.ceil((currentSlide.value + 1) / computedSlidesToShow.value));
 
-const updateCarouselWidth = () => {
-  const carouselElement = document.querySelector('.carousel-container') as HTMLElement | null;
-  carouselWidth.value = carouselElement ? carouselElement.offsetWidth : window.innerWidth;
-};
-
 onMounted(() => {
-  updateCarouselWidth();
-  window.addEventListener('resize', updateCarouselWidth);
   if (props.startSlide) {
     currentSlide.value = props.startSlide;
   }
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateCarouselWidth);
 });
 
 const computedSlidesToShow = computed(() => {
@@ -102,39 +93,3 @@ const goToSlide = (indicator: number) => {
   currentSlide.value = (indicator - 1) * computedSlidesToShow.value;
 };
 </script>
-
-<style scoped>
-.carousel-container {
-  width: 100%;
-  overflow: hidden;
-}
-
-.carousel-slide {
-  /* Add your slide styles here */
-}
-
-.indicators {
-  text-align: center;
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.indicators span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin: 0 5px;
-  background-color: #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.indicators span.active {
-  background-color: #333;
-}
-
-</style>

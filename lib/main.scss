@@ -1,0 +1,32 @@
+.bangoround--carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.bangoround--carousel-slide {
+  /* Add your slide styles here */
+}
+
+.bangoround--indicators {
+  text-align: center;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.bangoround--indicators span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.bangoround--indicators span.active {
+  background-color: #333;
+}
