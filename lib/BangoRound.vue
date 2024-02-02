@@ -1,6 +1,6 @@
 <template>
   <div class="bangoround--carousel-container">
-    <div class="bangoround--carousel-slides" :style="slidesWrapperStyles">
+    <div ref="brCarouselRef" class="bangoround--carousel-slides" :style="slidesWrapperStyles">
       <div
           class="bangoround--carousel-slide"
           v-for="(slide, index) in slides"
@@ -28,8 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue';
+import { ref, computed, onMounted, defineProps, defineExpose } from 'vue';
 import useResize from './composables/useResize';
+import {useSwipeAndDrag} from './composables/useSwipeAndDrag';
 import './main.scss';
 
 interface Props {
@@ -46,6 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const currentSlide = ref(0);
+const brCarouselRef = ref(null);
 const {width: carouselWidth} = useResize();
 const currentIndicator = computed(() => Math.ceil((currentSlide.value + 1) / computedSlidesToShow.value));
 
@@ -92,4 +94,25 @@ const toPrevSlide = () => {
 const goToSlide = (indicator: number) => {
   currentSlide.value = (indicator - 1) * computedSlidesToShow.value;
 };
+
+const handleSwipe = (distance: number, velocity: number) => {
+  const sensitivity = 100; // Adjust based on testing
+  const slidesToMove = Math.round(Math.abs(distance) / sensitivity * velocity);
+
+  if (distance < 0) {
+    // Swiped left / Dragged left
+    currentSlide.value = Math.min(currentSlide.value + slidesToMove, props.slides.length - 1);
+  } else {
+    // Swiped right / Dragged right
+    currentSlide.value = Math.max(currentSlide.value - slidesToMove, 0);
+  }
+};
+
+useSwipeAndDrag(brCarouselRef, handleSwipe);
+
+defineExpose({
+  toNextSlide,
+  toPrevSlide,
+  goToSlide
+});
 </script>
