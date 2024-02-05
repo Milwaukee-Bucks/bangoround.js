@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted, defineProps, defineExpose, reactive, watchEffect} from 'vue';
+import {ref, computed, onMounted, defineProps, defineExpose, reactive} from 'vue';
 import useResize from './composables/useResize';
 import {useLazyLoad} from './composables/useLazyload';
 import {UseLazyLoadOptions} from './composables/useLazyload';

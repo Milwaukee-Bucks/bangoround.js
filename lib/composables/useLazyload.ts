@@ -1,4 +1,3 @@
-// useLazyLoad.ts
 import { Ref, onUnmounted, ref } from 'vue';
 
 interface UseLazyLoadOptions {
