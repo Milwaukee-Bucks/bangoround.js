@@ -1,31 +1,33 @@
 <template>
-  <div ref="brContainerRef" class="bangoround--carousel-container">
-    <div ref="brCarouselRef" class="bangoround--carousel-slides" :style="slidesWrapperStyles">
-      <div
-          class="bangoround--carousel-slide"
-          v-for="(slide, index) in slides"
-          :key="index"
-          :style="slideStyles"
-      >
-        <template v-if="slidesVisibility[index]">
-          <slot :slide="slide" :index="index"></slot>
-        </template>
+  <div class="br-outer-wrapper" :class="{'br-controls-enabled': controls}">
+    <div ref="brContainerRef" class="bangoround--carousel-container">
+      <div ref="brCarouselRef" class="bangoround--carousel-slides" :style="slidesWrapperStyles">
+        <div
+            class="bangoround--carousel-slide"
+            v-for="(slide, index) in slides"
+            :key="index"
+            :style="slideStyles"
+        >
+          <template v-if="!lazyLoad.enabled || slidesVisibility[index]">
+            <slot :slide="slide" :index="index"></slot>
+          </template>
+        </div>
+      </div>
+
+      <!-- Indicators -->
+      <div class="bangoround--indicators" v-if="indicators">
+        <span
+            v-for="n in Math.ceil(slides.length / computedSlidesToShow)"
+            :key="n"
+            :class="{ active: n === currentIndicator }"
+            @click="goToSlideSet(n)"
+        ></span>
       </div>
     </div>
 
     <!-- Navigation Buttons -->
-    <button @click="toPrevSlide">Prev</button>
-    <button @click="toNextSlide">Next</button>
-
-    <!-- Indicators -->
-    <div class="bangoround--indicators" v-if="indicators">
-      <span
-          v-for="n in Math.ceil(slides.length / computedSlidesToShow)"
-          :key="n"
-          :class="{ active: n === currentIndicator }"
-          @click="goToSlide(n)"
-      ></span>
-    </div>
+    <button v-if="controls" class="br-btn br-prev-btn" @click="toPrevSlide">&#171;</button>
+    <button v-if="controls" class="br-btn br-next-btn" @click="toNextSlide">&#187;</button>
   </div>
 </template>
 
@@ -44,12 +46,14 @@ interface Props {
   startSlide?: number;
   lazyLoad?: UseLazyLoadOptions;
   indicators?: boolean;
+  controls?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   minWidth: '100px',
   maxWidth: '300px',
   startSlide: 0,
   indicators: false,
+  controls: false,
   lazyLoad: () => ({ enabled: false, rootMargin: '0px', threshold: 0.1, persistAfterLoad: false}),
 });
 
@@ -71,6 +75,7 @@ onMounted(() => {
       for (let i = 0; i < children.length; i++) {
         // Dynamically apply useLazyLoad for each slide
         useLazyLoad(ref(children[i]), {
+          enabled: props.lazyLoad.enabled,
           root: brContainerRef.value,
           onVisible: () => {
             slidesVisibility[i] = true; // Update visibility state
@@ -120,11 +125,29 @@ const toPrevSlide = () => {
   }
 };
 
-const goToSlide = (indicator: number) => {
+/**
+ * Go to a specific slide set based on the native indicator clicked.
+ * @param indicator
+ */
+const goToSlideSet = (indicator: number) => {
   currentSlide.value = (indicator - 1) * computedSlidesToShow.value;
 };
 
+/**
+ * Go to a specific slide, which will appear on the very left of the carousel regardless of the current slide set.
+ * @param slide
+ */
+const goToSlide = (slide: number) => {
+  currentSlide.value = slide;
+};
+
+/**
+ * Handle swipe and drag events.
+ * @param distance
+ * @param velocity
+ */
 const handleSwipe = (distance: number, velocity: number) => {
+  // @TODO: Add sensitivity prop
   const sensitivity = 100; // Adjust based on testing
   const slidesToMove = Math.round(Math.abs(distance) / sensitivity * velocity);
 
@@ -140,9 +163,13 @@ const handleSwipe = (distance: number, velocity: number) => {
 useSwipeAndDrag(brCarouselRef, handleSwipe);
 
 defineExpose({
+  // Methods
   toNextSlide,
   toPrevSlide,
-  goToSlide
+  goToSlideSet,
+  goToSlide,
+  // Computed
+  currentSlide,
 });
 </script>
 

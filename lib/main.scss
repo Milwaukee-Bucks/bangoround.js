@@ -3,6 +3,37 @@
   overflow: hidden;
 }
 
+.br-outer-wrapper {
+  position: relative;
+  .br-controls-enabled {
+      padding: 0 4em;
+  }
+}
+.br-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 55px;
+  height: 55px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 10;
+  border-radius: 50%;
+  font-size: 2em;
+}
+.br-prev-btn {
+  left: 0;
+  translate: -50%;
+}
+.br-next-btn {
+  right: 0;
+}
+
+
 .bangoround--carousel-slide {
   /* Add your slide styles here */
 }

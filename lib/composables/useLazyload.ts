@@ -1,6 +1,7 @@
 import { Ref, onUnmounted, ref } from 'vue';
 
 interface UseLazyLoadOptions {
+    enabled: boolean;
     root?: Element | null;
     rootMargin?: string;
     threshold?: number | number[];
